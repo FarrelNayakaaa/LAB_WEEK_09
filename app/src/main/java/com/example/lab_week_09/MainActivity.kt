@@ -23,6 +23,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import com.example.lab_week_09.ui.theme.*
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.squareup.moshi.Types
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +44,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// ==== Navigation Root ====
+//  Root Navigation App
 @Composable
 fun App(navController: NavHostController) {
     NavHost(
@@ -61,39 +64,48 @@ fun App(navController: NavHostController) {
     }
 }
 
-// ==== Data Model ====
+// Data Model
 data class Student(var name: String)
 
-// ==== Home Page ====
+
+// Home Page
 @Composable
 fun Home(
     navigateFromHomeToResult: (String) -> Unit
 ) {
-    val listData = remember { mutableStateListOf(
-        Student("Tanu"),
-        Student("Tina"),
-        Student("Tono")
-    ) }
+    val listData = remember {
+        mutableStateListOf(
+            Student("Tanu"),
+            Student("Tina"),
+            Student("Tono")
+        )
+    }
 
     var inputField by remember { mutableStateOf(Student("")) }
 
+    // Moshi setup
+    val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    val listType = Types.newParameterizedType(List::class.java, Student::class.java)
+    val adapter = moshi.adapter<List<Student>>(listType)
+
     HomeContent(
-        listData,
-        inputField,
-        { input -> inputField = inputField.copy(input) },
-        {
-            if (inputField.name.isNotBlank()) {
+        listData = listData,
+        inputField = inputField,
+        onInputValueChange = { input -> inputField = inputField.copy(input) },
+        onButtonClick = {
+            if (inputField.name.isNotBlank()) { // ✅ validasi input kosong
                 listData.add(inputField)
                 inputField = inputField.copy("")
             }
         },
-        {
-            navigateFromHomeToResult(listData.toList().toString())
+        navigateFromHomeToResult = {
+            val json = adapter.toJson(listData) // konversi list ke JSON
+            navigateFromHomeToResult(json)
         }
     )
 }
 
-// ==== Home Content ====
+// Home Content
 @Composable
 fun HomeContent(
     listData: SnapshotStateList<Student>,
@@ -119,16 +131,25 @@ fun HomeContent(
                 )
 
                 Row {
-                    PrimaryTextButton(text = stringResource(id = R.string.button_click)) {
+                    // Tombol Submit (disable jika input kosong)
+                    PrimaryTextButton(
+                        text = stringResource(id = R.string.button_click),
+                        enabled = inputField.name.isNotBlank()
+                    ) {
                         onButtonClick()
                     }
-                    PrimaryTextButton(text = stringResource(id = R.string.button_navigate)) {
+
+                    // Tombol Finish → Navigasi ke halaman hasil
+                    PrimaryTextButton(
+                        text = stringResource(id = R.string.button_navigate)
+                    ) {
                         navigateFromHomeToResult()
                     }
                 }
             }
         }
 
+        // Menampilkan daftar student
         items(listData) { item ->
             Column(
                 modifier = Modifier
@@ -142,20 +163,29 @@ fun HomeContent(
     }
 }
 
-// ==== Result Page ====
+//result
 @Composable
 fun ResultContent(listData: String) {
-    Column(
-        modifier = Modifier
-            .padding(vertical = 4.dp)
-            .fillMaxSize(),
+    val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    val listType = Types.newParameterizedType(List::class.java, Student::class.java)
+    val adapter = moshi.adapter<List<Student>>(listType)
+    val students = adapter.fromJson(listData) ?: emptyList()
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OnBackgroundItemText(text = listData)
+        item {
+            OnBackgroundTitleText(text = "Submitted Students")
+        }
+
+        items(students) { student ->
+            OnBackgroundItemText(text = student.name)
+        }
     }
 }
 
-// ==== Preview ====
+//preview
 @Preview(showBackground = true)
 @Composable
 fun PreviewHome() {

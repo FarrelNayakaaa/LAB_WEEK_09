@@ -7,7 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-// ===== TITLE TEXT =====
+// ==========================
+// 🔹 Title Text (Judul)
+// ==========================
 @Composable
 fun OnBackgroundTitleText(text: String) {
     TitleText(text = text, color = MaterialTheme.colorScheme.onBackground)
@@ -22,7 +24,9 @@ fun TitleText(text: String, color: Color) {
     )
 }
 
-// ===== ITEM TEXT =====
+// ==========================
+// 🔹 Item Text (List Item)
+// ==========================
 @Composable
 fun OnBackgroundItemText(text: String) {
     ItemText(text = text, color = MaterialTheme.colorScheme.onBackground)
@@ -37,19 +41,36 @@ fun ItemText(text: String, color: Color) {
     )
 }
 
-// ===== BUTTON =====
+// ==========================
+// 🔹 Custom Button
+// ==========================
 @Composable
-fun PrimaryTextButton(text: String, onClick: () -> Unit) {
-    TextButton(text = text, textColor = Color.White, onClick = onClick)
+fun PrimaryTextButton(
+    text: String,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
+    TextButton(
+        text = text,
+        textColor = Color.White,
+        enabled = enabled,
+        onClick = onClick
+    )
 }
 
 @Composable
-fun TextButton(text: String, textColor: Color, onClick: () -> Unit) {
+fun TextButton(
+    text: String,
+    textColor: Color,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
     Button(
         onClick = onClick,
         modifier = Modifier.padding(8.dp),
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.DarkGray,
+            containerColor = if (enabled) Color.DarkGray else Color.LightGray,
             contentColor = textColor
         )
     ) {

@@ -64,4 +64,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
     implementation("androidx.compose.runtime:runtime:1.5.0")
     implementation("androidx.navigation:navigation-compose:2.7.4")
+
+    //moshi json
+    implementation("com.squareup.moshi:moshi:1.15.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
 }
