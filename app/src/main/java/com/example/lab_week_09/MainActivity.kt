@@ -1,4 +1,5 @@
 package com.example.lab_week_09
+import com.example.lab_week_09.ui.theme.*
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -68,6 +69,7 @@ fun HomeContent(
     onButtonClick: () -> Unit
 ) {
     LazyColumn {
+        // Input Section
         item {
             Column(
                 modifier = Modifier
@@ -75,18 +77,25 @@ fun HomeContent(
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(id = R.string.enter_item))
+                // Ganti Text biasa dengan UI Element
+                OnBackgroundTitleText(text = stringResource(id = R.string.enter_item))
+
                 TextField(
                     value = inputField.name,
                     onValueChange = { onInputValueChange(it) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
-                Button(onClick = { onButtonClick() }) {
-                    Text(text = stringResource(id = R.string.button_click))
+
+                // Ganti Button biasa dengan UI Element
+                PrimaryTextButton(
+                    text = stringResource(id = R.string.button_click)
+                ) {
+                    onButtonClick()
                 }
             }
         }
 
+        // List Section
         items(listData) { item ->
             Column(
                 modifier = Modifier
@@ -94,7 +103,8 @@ fun HomeContent(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = item.name)
+                // Ganti Text biasa dengan UI Element
+                OnBackgroundItemText(text = item.name)
             }
         }
     }
