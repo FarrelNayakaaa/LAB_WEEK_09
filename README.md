@@ -10,3 +10,8 @@
 “Commit No. 3 – UI Element and Theme
 
 <img width="259" height="529" alt="Screenshot 2025-11-03 at 10 50 40 AM" src="https://github.com/user-attachments/assets/32d7b756-626f-4c05-bbc0-34ed9d45b574" />
+
+“Commit No. 4 – Navigation”
+
+<img width="258" height="537" alt="Screenshot 2025-11-03 at 10 56 02 AM" src="https://github.com/user-attachments/assets/76459479-523c-4b72-a533-373b706a9e0a" />
+<img width="271" height="542" alt="Screenshot 2025-11-03 at 10 55 57 AM" src="https://github.com/user-attachments/assets/e98f0b97-3244-4bdb-b604-74b9ad361e45" />
